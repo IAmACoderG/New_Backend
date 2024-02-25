@@ -6,7 +6,7 @@ const port = process.env.PORT || 4000
 
 dbConnect().then(
     app.listen(port, () => {
-        console.log("Connecting the Server...", port);
+        console.log(`Connecting the Server...http://localhost:${port}`);
     })
 ).catch((err) => {
     console.log("DataBase Connection Failed...", err);
