@@ -31,16 +31,21 @@ export const registerUser = asyncHandler(async (req, res) => {
     }
 
     //Step 4. check image and avatar uploaded or not..>>>
-    const avatarLocalPath = req.files?.avatar[0]?.path;
-    const coverImageLocalPath = req.files?.coverImage[0]?.path;
 
-    console.log(avatarLocalPath);
-    console.log(coverImageLocalPath);
+    // optional chaining Approach .........>>>>>>>>>
+     // const avatarLocalPath = req.files?.avatar?.path; 
+    // const coverImageLocalPath = req.files?.coverImage?.path;
+
+    // optional chaining Approach is working if field passed by the user in req.body or we can say req.files beause we used middleware multer for passing files. but if field not pass by the user in that case Error Occurs..for that reason take a Different Approach 
+
+    // Old School Approach if The codition are true pass the value in varible or else pass the null ....>>>>>>
+    const avatarLocalPath = req.files && Array.isArray(req.files.avatar) && req.files.avatar.length > 0 ? req.files.avatar[0].path : null
+    const coverImageLocalPath = req.files && Array.isArray(req.files.coverImage) && req.files.coverImage.length > 0 ? req.files.coverImage[0].path : null
+
+
 
     //Step 5. check the Avatar field..>>>
-    if (!avatarLocalPath) {
-        throw new ApiError(400, "Avatar is Required")
-    }
+    if (!avatarLocalPath) { throw new ApiError(400, "Avatar is Required") }
 
     //Step 6.upload them at cloudinary..>>>
     const avatarUploded = await uploadOnCloudinary(avatarLocalPath);
